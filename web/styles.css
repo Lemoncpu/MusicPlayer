@@ -292,6 +292,21 @@ input[type="range"]::-webkit-slider-thumb {
   gap: 14px;
 }
 
+.lang-switch-btn {
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.lang-switch-btn:hover {
+  background: rgba(29, 185, 84, 0.1);
+  border-color: rgba(29, 185, 84, 0.2);
+  transform: translateY(-1px);
+}
+
 .eyebrow,
 .section-head span,
 .section-note,
