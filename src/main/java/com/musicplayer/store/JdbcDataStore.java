@@ -27,7 +27,7 @@ public final class JdbcDataStore implements DataStore {
         this.user = user;
         this.password = password;
         initializeSchema();
-        seedDemoData();
+        initializeFixedLibrary();
     }
 
     @Override
@@ -382,9 +382,13 @@ public final class JdbcDataStore implements DataStore {
         }
     }
 
+    private void initializeFixedLibrary() throws SQLException {
+        ensureCanonicalSongs();
+        seedDemoData();
+    }
+
     private void seedDemoData() throws SQLException {
         long studentUserId = ensureStudentUser();
-        ensureDemoSongs();
         ensureDefaultPlaylist(studentUserId);
         ensureDemoHistory(studentUserId);
     }
@@ -397,15 +401,16 @@ public final class JdbcDataStore implements DataStore {
         return register("student", "123456").id();
     }
 
-    private void ensureDemoSongs() throws SQLException {
-        if (countRows("song") > 0) {
+    private void ensureCanonicalSongs() throws SQLException {
+        if (hasCanonicalSongs()) {
             return;
         }
-        importSong("Campus Sunrise", "Course Band", "Semester Beats", cover(1), "/media/demo/1.wav", 8);
-        importSong("Library Lo-Fi", "Study Crew", "Focus Session", cover(2), "/media/demo/2.wav", 8);
-        importSong("Route To Finals", "Night Coders", "Deadline Mix", cover(3), "/media/demo/3.wav", 8);
-        importSong("Weekend Refactor", "Merge Conflict", "Build Success", cover(4), "/media/demo/4.wav", 8);
-        importSong("Fresh Deploy", "Blue Screeners", "Hotfix Dreams", cover(5), "/media/demo/5.wav", 8);
+        resetLibraryData();
+        importSong("song1", "artist1", "album1", cover(1), audio(1), 240);
+        importSong("song2", "artist2", "album2", cover(2), audio(2), 240);
+        importSong("song3", "artist3", "album3", cover(3), audio(3), 240);
+        importSong("song4", "artist4", "album4", cover(4), audio(4), 240);
+        importSong("song5", "artist5", "album5", cover(5), audio(5), 240);
     }
 
     private void ensureDefaultPlaylist(long userId) throws SQLException {
@@ -445,6 +450,30 @@ public final class JdbcDataStore implements DataStore {
              ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM " + tableName)) {
             resultSet.next();
             return resultSet.getInt(1);
+        }
+    }
+
+    private boolean hasCanonicalSongs() throws SQLException {
+        if (countRows("song") != 5) {
+            return false;
+        }
+        List<String> titles = new ArrayList<>();
+        try (Connection connection = open();
+             PreparedStatement statement = connection.prepareStatement("SELECT title FROM song ORDER BY id");
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                titles.add(resultSet.getString("title"));
+            }
+        }
+        return titles.equals(List.of("song1", "song2", "song3", "song4", "song5"));
+    }
+
+    private void resetLibraryData() throws SQLException {
+        try (Connection connection = open(); Statement statement = connection.createStatement()) {
+            statement.executeUpdate("DELETE FROM play_history");
+            statement.executeUpdate("DELETE FROM playlist_song");
+            statement.executeUpdate("DELETE FROM playlist");
+            statement.executeUpdate("DELETE FROM song");
         }
     }
 
@@ -519,7 +548,11 @@ public final class JdbcDataStore implements DataStore {
     }
 
     private static String cover(int seed) {
-        return "https://picsum.photos/seed/musicplayer-" + seed + "/480/480";
+        return "/media/uploads/covers/song" + seed + ".jpg";
+    }
+
+    private static String audio(int seed) {
+        return "/media/uploads/audio/song" + seed + ".mp3";
     }
 
     private static final class PlaylistBuilder {
