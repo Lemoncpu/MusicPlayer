@@ -1,217 +1,135 @@
-# MySQL JDBC 杩愯璇存槑
+# Music Player
 
-褰撳墠椤圭洰榛樿浣跨敤鏈満 MySQL 浣滀负 JDBC 鏁版嵁婧愩€?
-榛樿杩炴帴鍙傛暟锛?- 涓绘満锛歚127.0.0.1`
-- 绔彛锛歚3306`
-- 鐢ㄦ埛锛歚root`
-- 瀵嗙爜锛歚qx418504`
-- 鏁版嵁搴擄細`musicplayer`
+Music Player is a course project music player built with Vue 3 on the frontend and a native Java HTTP server on the backend. The frontend handles routing, page rendering, and HTML5 Audio playback. The backend exposes JSON APIs, serves static files, and reads or writes music data through JDBC.
 
-瀹炵幇璇存槑锛?- 鍚姩鏃朵細浼樺厛灏濊瘯杩炴帴 MySQL銆?- 濡傛灉鏁版嵁搴撲笉瀛樺湪锛屼細鑷姩鎵ц `CREATE DATABASE IF NOT EXISTS musicplayer`銆?- 绋嬪簭浼氳嚜鍔ㄥ垱寤?`app_user`銆乣song`銆乣playlist`銆乣playlist_song`銆乣play_history` 琛ㄣ€?- 鐧诲綍鍜屾敞鍐屾帴鍙ｄ粛鐒朵娇鐢?`/api/auth/login` 涓?`/api/auth/register`銆?- 濡傛灉 MySQL 璁よ瘉澶辫触锛岀▼搴忎細鎵撳嵃閿欒骞朵复鏃跺洖閫€鍒板唴瀛樻ā寮忋€?
-椹卞姩璇存槑锛?- 宸插皢 MySQL JDBC 椹卞姩鏀惧湪 `lib/mysql-connector-j-9.2.0.jar`銆?- 浠ｇ爜浼氫紭鍏堜粠 classpath 鍔犺浇锛涜嫢 classpath 涓病鏈夛紝浼氬皾璇曚粠 `lib/` 鑷姩鍔犺浇銆?
-杩愯鍛戒护锛?```powershell
-javac -encoding UTF-8 -d out (Get-ChildItem -Recurse -Filter *.java | ForEach-Object { $_.FullName })
+## Tech Stack
+
+- Frontend: Vue 3, Vue Router, HTML5 Audio
+- Backend: Java, com.sun.net.httpserver
+- Data access: JDBC
+- Default database: MySQL
+- Fallback mode: in-memory data store
+
+## Project Structure
+
+- `web/`: frontend HTML, JavaScript, and CSS
+- `src/main/java/com/musicplayer/`: backend entry point and Java source
+- `src/main/java/com/musicplayer/http/`: API handlers and static/media handlers
+- `src/main/java/com/musicplayer/store/`: data abstraction, JDBC store, memory store
+- `src/main/java/com/musicplayer/model/`: Song, Playlist, PlayHistoryEntry, UserSession
+- `database/`: schema and seed SQL
+- `media/uploads/audio/`: built-in audio files
+- `media/uploads/covers/`: built-in cover images
+
+## Core Features
+
+- User login and registration
+- Song library display and playback
+- Playlist create, delete, add, and remove
+- Play history recording
+- Local song and cover import
+- Spotify Web style three-column frontend layout
+
+## Built-in Music Library
+
+The project no longer uses generated demo WAV audio and no longer serves `/media/demo/*.wav`.
+
+The built-in library now comes directly from local project resources:
+
+- Audio files: `media/uploads/audio/song1.mp3` to `song5.mp3`
+- Cover files: `media/uploads/covers/song1.jpg` to `song5.jpg`
+
+Both JDBC mode and memory mode load the same five default songs:
+
+- `song1`
+- `song2`
+- `song3`
+- `song4`
+- `song5`
+
+The corresponding runtime media URLs are:
+
+- `/media/uploads/audio/song1.mp3` to `/media/uploads/audio/song5.mp3`
+- `/media/uploads/covers/song1.jpg` to `/media/uploads/covers/song5.jpg`
+
+## JDBC Initialization
+
+The project uses MySQL JDBC by default.
+
+Default connection values:
+
+- Host: `127.0.0.1`
+- Port: `3306`
+- User: `root`
+- Password: `qx418504`
+- Database: `musicplayer`
+
+Startup behavior:
+
+1. Connect to MySQL and create the `musicplayer` database if needed
+2. Create `app_user`, `song`, `playlist`, `playlist_song`, and `play_history` tables if needed
+3. Check whether the `song` table contains exactly `song1` to `song5`
+4. If not, clear built-in song-related data and rebuild the fixed five-song library
+5. Recreate the default user, default playlist, and default play history
+
+Default account:
+
+- Username: `student`
+- Password: `123456`
+
+## Memory Mode
+
+If JDBC is unavailable, the project can run in memory mode:
+
+```powershell
+$env:MUSICPLAYER_DB_MODE="memory"
 java -cp out com.musicplayer.App
 ```
 
-濡傞渶瑕嗙洊榛樿杩炴帴鍙傛暟锛屽彲璁剧疆鐜鍙橀噺锛?- `MUSICPLAYER_DB_MODE=jdbc`
-- `MUSICPLAYER_JDBC_URL`
-- `MUSICPLAYER_JDBC_USER`
-- `MUSICPLAYER_JDBC_PASSWORD`
+Memory mode uses the same built-in local songs and covers.
 
----
-# MusicPlayer
+## Run the Project
 
-娑撯偓娑擃亞顑侀崥?Java 鐠囧墽鈻兼い鍦窗鐟曚焦鐪伴惃鍕叾娑旀劖鎸遍弨鎯ф珤缁€杞扮伐妞ゅ湱娲伴妴?
-- 閸撳秶顏敍姝歏ue.js + HTML5 + Vue Router`
-- 閸氬海顏敍姝氶崢鐔烘晸 Java + com.sun.net.httpserver`
-- 閺佺増宓佺拋鍧楁６閿涙瓪JDBC`
-- 姒涙顓绘潻鎰攽濡€崇础閿涙瓪memory`
-- 閸欘垶鈧瀵旀稊鍛濡€崇础閿涙瓪jdbc`
-
-## 妞ゅ湱娲扮紒鎾寸€?
-```text
-src/main/java/com/musicplayer  Java 閸氬海顏┃鎰垳
-web/                          Vue 閸楁洟銆夐崜宥囶伂
-database/                     瀵ら缚銆冩稉搴″灥婵瀵茬粈杞扮伐 SQL
-```
-
-## 瀹告彃鐤勯悳鏉垮閼?
-- 閻ц缍?/ 濞夈劌鍞?- 妫ｆ牠銆夐幒銊ㄥ礃鐏炴洜銇?- 濮濆本娲搁崚妤勩€冩稉搴㈡偝缁?- HTML5 Audio 閹绢厽鏂侀妴浣规畯閸嬫嚎鈧椒绗傛稉鈧＃鏍モ偓浣风瑓娑撯偓妫ｆ牓鈧浇绻樻惔锔藉珛閸斻劊鈧線鐓堕柌蹇斿付閸?- 閹存垹娈戝灞藉礋閿涙艾鍨卞鎭掆偓浣稿灩闂勩們鈧焦鍧婇崝鐘崇摃閺囧眰鈧胶些闂勩倖鐡曢弴?- 閺堚偓鏉╂垶鎸遍弨鎹愵唶瑜?- Vue Router 鐟欏棗娴樼€圭懓娅掔紒鍕矏閸旂喕鍏樺Ο鈥虫健
-- 閸樼喓鏁?Java API 娑撳酣娼ら幀浣界カ濠ф劗绮烘稉鈧張宥呭
-- Spotify Web 妞嬪孩鐗稿ǎ杈閻ｅ矂娼版稉搴″弿鐏炩偓鎼存洟鍎撮幘顓熸杹閸ｃ劌绔风仦鈧?
-## 閸撳秶顏拋鎹愵吀鐠囧瓨妲?
-閺堫剟銆嶉惄顔炬畱閸撳秶顏柌鍥╂暏 `Vue.js + HTML5 + Vue Router` 鐎圭偟骞囬敍宀€鏅棃銏ゎ棑閺嶅吋鏁奸柅鐘辫礋閹恒儴绻?Spotify 缂冩垿銆夐悧鍫㈡畱濞ｈ精澹婇棅鍏呯楠炲啿褰寸敮鍐ㄧ湰閵嗗倹鏆ｆ担鎾诲櫚閻劌涔忔笟褍顕遍懜顏呯埉閵嗕椒鑵戦梻缈犲瘜閸愬懎顔愰崠鎭掆偓浣稿礁娓氀備繆閹垱鐖崪灞界俺闁劌鍙忕仦鈧幘顓熸杹閸ｃ劎娈戞い鐢告桨缂佹挻鐎敍灞芥躬娑撳秵鏁奸崝銊ユ倵缁旑垱甯撮崣锝呮嫲閺嶇绺炬稉姘闁槒绶惃鍕閹绘劒绗呴敍灞惧絹閸楀洨閮寸紒鐔烘畱娴溠冩惂閹扮喍绗岀仦鏇犮仛閺佸牊鐏夐妴?
-閸撳秶顏崗銉ュ經閺傚洣娆㈡担宥勭艾 `web/index.html`閿涘矁绀嬬拹锝嗗瘯鏉?Vue 鎼存梻鏁ら敍灞借嫙闁俺绻?CDN 瀵洖鍙?`Vue 3` 閸?`Vue Router 4`閵嗗倿銆夐棃顫瘜娴ｆ捇鈧槒绶悽?`web/app.js` 鐠愮喕鐭楅敍灞藉瘶閸氼偆绮嶆禒鑸的侀弶瑁も偓浣界熅閻究鈧礁鍙忕仦鈧悩鑸碘偓浣告嫲 API 鐠嬪啰鏁ら敍娑滎潒鐟欏鐗卞蹇曠埠娑撯偓閻?`web/styles.css` 閹貉冨煑閵?
-### Vue 缂佸嫪娆㈢紒鎾寸€?
-閸撳秶顏柌鍥╂暏閳ユ粓銆夐棃銏㈢矋娴?+ 閸忣剙鍙＄仦鏇犮仛缂佸嫪娆?+ 閸忋劌鐪幘顓熸杹閸ｃ劌锛撶仦鍌椻偓婵堟畱缂佸嫮绮愰弬鐟扮础閵?
-#### 1. 閺嶅湱绮嶆禒?`RootApp`
-
-閺嶅湱绮嶆禒鎯扮鐠愶絽鐤勯悳鐗堟殻娑?Spotify Web 妞嬪孩鐗告い鐢告桨婢瑰啿鐪伴敍灞煎瘜鐟曚浇浜寸拹锝呭瘶閹奉剨绱?
-- 濞撳弶鐓嬪锔挎櫠鐎佃壈鍩呴弽?- 濞撳弶鐓嬫い鍫曞劥閺嶅洭顣介弽蹇庣瑢閸忋劌鐪幖婊呭偍閸?- 濞撳弶鐓嬫稉顓㈡？娑撹鍞寸€圭懓灏?`router-view`
-- 濞撳弶鐓嬮崣鍏呮櫠娣団剝浼呴弽蹇ョ礉閺勫墽銇氳ぐ鎾冲閹绢厽鏂佹稉搴㈡付鏉╂垶鎸遍弨鐐喅鐟?- 濞撳弶鐓嬫惔鏇㈠劥閸忋劌鐪幘顓熸杹閸?- 婢跺嫮鎮婇惂璇茬秿閸滃本婀惂璇茬秿閻樿埖鈧椒绗呴惃鍕櫕闂堛垹鍨忛幑?
-鐠囥儳绮嶆禒璺侯嚠鎼存棁顕崇粙瀣洣濮瑰倷鑵戦垾婊堚偓姘崇箖鐟欏棗娴樼€圭懓娅掔紒鍕矏閸旂喕鍏樺Ο鈥虫健閳ユ繄娈戠€圭偟骞囬幀婵婄熅閿涘畭router-view` 鐠愮喕鐭楅崚鍥ㄥ床妫ｆ牠銆夐妴浣圭摃閺囨煡銆夐妴浣圭摃閸楁洟銆夐崪灞炬尡閺€楣冦€夐敍宀冣偓灞筋嚤閼割亜鎷伴幘顓熸杹閸ｃ劋绻氶幐浣稿弿鐏炩偓鐢悂鈹楅妴?
-#### 2. 閻ц缍嶆い鐢电矋娴?`LoginPage`
-
-閻ц缍嶆い鍏哥箽閻ｆ瑥甯張澶屾瑜?/ 濞夈劌鍞芥稉姘閸旂喕鍏橀敍灞肩稻鐟欏棜顫庢稉濠呯殶閺佺繝璐熷ǎ杈閻滆崵鎷戦幏鐔糕偓浣稿幢閻楀洭顥撻弽纭风礉娑撴槒顩﹂崠鍛閿?
-- 閻劍鍩涢崥宥勭瑢鐎靛棛鐖滄潏鎾冲弳
-- 閻ц缍?/ 濞夈劌鍞藉Ο鈥崇础閸掑洦宕?- 鐠嬪啰鏁ら崥搴ｎ伂鐠併倛鐦夐幒銉ュ經
-- 閻ц缍嶉幋鎰閸氬氦绻橀崗銉ゅ瘜閻ｅ矂娼?
-#### 3. 妫ｆ牠銆夌紒鍕 `HomePage`
-
-妫ｆ牠銆夐柌宥嗙€稉娲叾娑旀劕閽╅崣棰佷繆閹垱绁︽い鐢告桨閿涘奔瀵岀憰浣稿瘶閹奉剨绱?
-- 濞嗐垼绻嬪Ο顏勭畽閸栧搫鐓?- 閳ユ粎鎴风紒顓熸暪閸氼兘鈧繃甯归懡鎰隘
-- 閳ユ粈绮栭弮銉﹀腹閼芥劏鈧繂鐨濋棃銏犲幢閻楀洤灏?- 閳ユ粍娓舵潻鎴炴尡閺€閿偓婵囨锤閻╊喖鍨悰銊ュ隘
-- 閳ユ粍鏌婃ご婊冨敶鐎瑰厜鈧繆藟閸忓懎鍨庨崠?
-鏉╂瑩鍎撮崚鍡樻纯閹恒儴绻?Spotify Web 閻ㄥ嫰顩绘い闈涘敶鐎圭濡總蹇ョ礉闁倸鎮庢担婊€璐熺拠鍓р柤鐏炴洜銇氭い鐢告桨閵?
-#### 4. 濮濆本娲告い鐢电矋娴?`SongsPage`
-
-濮濆本娲告い鍨暭娑?Spotify 妞嬪孩鐗搁惃鍕锤閻╊喖鍨悰銊ョ鐏炩偓閿涘奔瀵岀憰浣稿瘶閹奉剨绱?
-- 妞ゅ爼鍎撮幖婊呭偍濡?- 閺囪尙娲扮悰銊ャ仈
-- 閺囪尙娲扮悰灞界潔缁€?- 閻愮懓鍤灞炬锤閻╁瓨甯撮幘顓熸杹
-
-閻╁憡鐦导鐘电埠閸楋紕澧栫純鎴炵壐閿涘矁绻栫粔宥呯鐏炩偓閺囨挳鈧倸鎮庨棅鍏呯楠炲啿褰存稉顓炪亣闁插繑鐡曢弴鑼畱濞村繗顫嶆稉搴㈡惙娴ｆ嚎鈧?
-#### 5. 濮濆苯宕熸い鐢电矋娴?`PlaylistsPage`
-
-濮濆苯宕熸い鍨暭娑撹　鈧粍鐡曢崡鏇炪仈闁劋淇婇幁?+ 濮濆本娲搁崚妤勩€冮垾婵堟畱缂佹挻鐎敍灞煎瘜鐟曚礁瀵橀幏顒婄窗
-
-- 濮濆苯宕熷鍌濐潔閸栧搫鐓?- 閺傛澘缂撳灞藉礋
-- 濮濆苯宕熼崚妤勩€冪仦鏇犮仛
-- 閸氭垶鐡曢崡鏇氳厬濞ｈ濮炲灞炬锤
-- 娴犲孩鐡曢崡鏇氳厬缁夊娅庡灞炬锤
-- 閸掔娀娅庡灞藉礋
-- 閸︺劍鐡曢崡鏇氳厬閻╁瓨甯撮幘顓熸杹濮濆本娲?
-鏉╂瑤绔撮柈銊ュ瀻鐎瑰本鏆ｆ穱婵堟殌娴滃棜顕崇粙瀣€嶉惄顔款洣濮瑰倷鑵戦惃鍕殶閹诡喖绨辨晶鐐插灩閺€瑙勭叀閸旂喕鍏橀妴?
-#### 6. 濮濓絽婀幘顓熸杹妞ょ數绮嶆禒?`NowPlayingPage`
-
-濮濓絽婀幘顓熸杹妞ょ數鏁ゆ禍搴＄潔缁€鍝勭秼閸撳秵鎸遍弨鐐摃閺囪尙娈戠拠锔剧矎娣団剝浼呴敍灞煎瘜鐟曚礁瀵橀幏顒婄窗
-
-- 婢堆冩槀鐎电鐨濋棃銏犵潔缁€?- 濮濆本娲搁崥宥冣偓浣圭摃閹靛鈧椒绗撴潏鎴滀繆閹?- 閹绢厽鏂佹潻娑樺娑撳孩妞傞梻?- 娑撳﹣绔存＃鏍モ偓浣规尡閺€?/ 閺嗗倸浠犻妴浣风瑓娑撯偓妫ｆ牗甯堕崚?- 闂婃娊鍣虹拫鍐Ν
-
-#### 7. 閸忣剙鍙＄紒鍕 `SongCard`
-
-鐠囥儳绮嶆禒鍓佹暏娴滃酣顩绘い鍨腹閼芥劕灏崪宀€绨块柅澶婂隘閻ㄥ嫬鐨濋棃銏犲幢閻楀洤鐫嶇粈鐚寸礉娑撴槒顩﹂崠鍛閿?
-- 濮濆本娲哥亸渚€娼?- 濮濆本娲搁弽鍥暯娑撳骸澹囬弽鍥暯
-- 濞搭喖濮╅幘顓熸杹閹稿鎸?- 閻愮懓鍤崡锛勫閻╁瓨甯撮幘顓熸杹
-
-#### 8. 閸忣剙鍙＄紒鍕 `TrackRow`
-
-鐠囥儳绮嶆禒鍓佹暏娴滃孩鐡曢弴鏌ャ€夐妴浣规付鏉╂垶鎸遍弨鎯у隘閸滃本鐡曢崡鏇熺摃閺囨彃鍨悰銊よ厬閻ㄥ嫭铆閸氭垶娲搁惄顔款攽鐏炴洜銇氶敍灞煎瘜鐟曚礁瀵橀幏顒婄窗
-
-- 鎼村繐褰块妴浣哥殱闂堫潿鈧焦鐖ｆ０妯糕偓浣圭摃閹靛淇婇幁?- 娑撴捁绶穱鈩冧紖閹存牠妾崝鐘侯嚛閺?- 閹绢厽鏂侀幙宥勭稊閹稿鎸?
-鐎瑰啯妲搁弫缈犻嚋 Spotify Web 妞嬪孩鐗哥敮鍐ㄧ湰娑擃厽娓堕柌宥堫洣閻ㄥ嫰鈧氨鏁ら崚妤勩€冮崡鏇炲帗閵?
-### 鐠侯垳鏁辨稉搴ㄣ€夐棃銏㈢矋缂?
-妞ゅ湱娲伴柅姘崇箖 `Vue Router` 缂佸嫮绮愰崝鐔诲厴妞ょ敻娼伴敍灞煎瘜鐟曚浇鐭鹃悽鍗炲瘶閹奉剨绱?
-- `/login`閿涙氨娅ヨぐ?/ 濞夈劌鍞芥い?- `/`閿涙岸顩绘い?- `/songs`閿涙碍鐡曢弴鎻掑灙鐞涖劑銆?- `/playlists`閿涙碍鍨滈惃鍕摃閸楁洟銆?- `/now-playing`閿涙碍顒滈崷銊︽尡閺€楣冦€?
-鐠侯垳鏁辩€瑰牆宕兼穱婵囧瘮閸樼喐婀侀柅鏄忕帆閿?
-- 閺堫亞娅ヨぐ鏇犳暏閹村嘲褰ч懗鍊熺箻閸忋儳娅ヨぐ鏇€?- 瀹歌尙娅ヨぐ鏇犳暏閹寸柉顔栭梻顔炬瑜版洟銆夐弮鏈电窗閼奉亜濮╃捄瀹犳祮閸掍即顩绘い?
-鏉╂瑦鍓伴崨宕囨絻閺堫剚顐奸弨鍦娴犲懓鐨熼弫瀵告櫕闂堫澀绗岀敮鍐ㄧ湰閿涘奔绗夐弨鐟板綁閸樼喐婀佹稉姘濞翠胶鈻奸妴?
-### 閸撳秶顏悩鑸碘偓浣侯吀閻炲棜顔曠拋?
-妞ゅ湱娲板▽鈩冩箒瀵洖鍙?Vuex 閹?Pinia閿涘矁鈧本妲搁柅姘崇箖 `reactive` 閸掓稑缂撴潪濠氬櫤缁狙冨弿鐏炩偓閻樿埖鈧礁顕挒鈽呯礉缂佺喍绔寸粻锛勬倞娴犮儰绗呴崘鍛啇閿?
-- 瑜版挸澧犻惂璇茬秿閻劍鍩?- 濮濆本娲搁崚妤勩€?- 濮濆苯宕熼崚妤勩€?- 閺堚偓鏉╂垶鎸遍弨鎹愵唶瑜?- 瑜版挸澧犻幘顓熸杹濮濆本娲?- 瑜版挸澧犻幘顓熸杹鏉╂稑瀹虫稉搴⑩偓缁樻闂€?- 閺勵垰鎯佸锝呮躬閹绢厽鏂?- 闂婃娊鍣烘径褍鐨?- 閹兼粎鍌ㄩ崗鎶芥暛鐎?- 妞ょ敻娼伴悩鑸碘偓浣瑰絹缁€杞颁繆閹?
-鏉╂瑧顫掗弬瑙勵攳閺囨挳鈧倸鎮庣拠鍓р柤妞ゅ湱娲伴敍姘辩波閺嬪嫮鐣濋崡鏇樷偓浣规娴滃海鎮婄憴锝冣偓浣规￥闂団偓妫版繂顦婚弸鍕紦娓氭繆绂嗛敍灞借嫙娑撴梹鏌熸笟鍨躬閻滅増婀佹禒锝囩垳娑撳﹤浠涢悾宀勬桨闁插秵鐎妴?
-### 闂婂厖绠伴幘顓熸杹鐎圭偟骞囬弬鐟扮础
-
-閹绢厽鏂侀崳銊ょ矝閸╄桨绨?HTML5 `Audio` 鐎电钖勭€圭偟骞囬敍灞肩瑝娓氭繆绂嗙粭顑跨瑏閺傚綊鐓舵０鎴炲絻娴犺翰鈧倷瀵岀憰浣藉厴閸旀稑瀵橀幏顒婄窗
-
-- 閸旂姾娴囬棅鎶筋暥閸︽澘娼冮獮鑸垫尡閺€?- 閺嗗倸浠犳稉搴划婢跺秵鎸遍弨?- 閼奉亜濮╅弴瀛樻煀閹绢厽鏂佹潻娑樺
-- 閹锋牕濮╂潻娑樺閺夆€崇杽閻滄媽鐑︽潪顒佹尡閺€?- 鐠嬪啯鏆ｉ棅鎶藉櫤
-- 閼奉亜濮╅崚鍥ㄥ床娑撳﹣绔存＃鏍︾瑢娑撳绔存＃?- 閹绢厽鏂侀崥搴ゎ唶瑜版洘娓舵潻鎴炴尡閺€鎯у坊閸?
-閸ョ姵顒濋敍灞炬拱濞嗏剝鏁奸悧鍫滃瘜鐟曚焦妲搁崜宥囶伂鐟欏棜顫庨崪灞界鐏炩偓閸楀洨楠囬敍宀冣偓灞肩瑝閺勵垯绗熼崝锟犫偓鏄忕帆闁插秴鍟撻妴?
-## 閸撳秶顏弽宄扮础鐠佹崘顓哥拠瀛樻
-
-閺堫剟銆嶉惄顔界壉瀵繑鏋冩禒鏈电秴娴?`web/styles.css`閿涘本鏆ｆ担鎾诡啎鐠佲剝鈧繆鐭剧拫鍐╂殻娑撹　鈧藩potify Web 妞嬪孩鐗搁惃鍕箒閼硅尙骞撻悹鍐╁珯閹胶鏅棃鈶┾偓婵勨偓鍌滄祲濮ｆ柨鍨甸悧鍫濅焊鐠囧墽鈻肩仦鏇犮仛閸ㄥ娈戦弳鏍閻ｅ矂娼伴敍灞炬煀閻楀牊婀伴弴鏉戝繁鐠嬪啴鐓舵稊鎰挬閸欐壆缍夋い鐢殿伂閻ㄥ嫭鐭囧ù鍛婂妳閸滃苯鐪扮痪褎鍔呴妴?
-### 閺佺繝缍嬬憴鍡氼潕妞嬪孩鐗?
-閺佺繝缍嬬憴鍡氼潕闁插洨鏁ゅǎ杈娑撳顣介敍灞间簰姒涙垼澹婇妴浣圭箒閻忔媽澹婇崪灞藉磹闁繑妲戦棃銏℃緲娑撹桨瀵岄敍宀勫帳閸氬牏璞㈤懝鎻掑繁鐠嬪啳澹婇弸鍕紦閸戠儤甯存潻?Spotify Web 閻ㄥ嫯顫嬬憴澶庮嚔鐟封偓閵嗗倽鍎楅弲顖欏▏閻劌顦跨仦鍌涚瑤閸欐ü绗岄弻鏂挎嫲閸忓鏋掗敍灞筋杻瀵儤鐨奸崶瀛樺妳閸滃矂銆夐棃銏犵湴濞喡扳偓?
-娑撴槒顩︾憴鍡氼潕閻楀湱鍋ｆ俊鍌欑瑓閿?
-- 娴ｈ法鏁ゆ鎴犱紗閼硅弓缍旀稉杞板瘜閻ｅ矂娼版惔鏇″
-- 娴ｈ法鏁ょ紒鑳瀵缚鐨熸稉缁樻尡閺€鐐瘻闁筋喖鎷伴崗鎶芥暛娴溿倓绨?- 娴ｈ法鏁ら崡濠団偓蹇旀閺嗘澹婇崡锛勫閽€銉┾偓鐘靛箵閻犲啯瀚欓幀浣规櫏閺?- 娴ｈ法鏁ゅΟ锛勭ˇ閵嗕線妲捐ぐ鍗炴嫲娴滎喖瀹崇€佃鐦鍝勫鐏炲倻楠?- 鐠佲晠銆夐棃銏℃纯閹恒儴绻庨棅鍏呯楠炲啿褰寸純鎴︺€夋禍褍鎼ч懓灞肩瑝閺勵垱娅橀柅姘愁嚦缁嬪顓搁悶鍡涖€夐棃?
-### 鐢啫鐪拋鎹愵吀
-
-妞ょ敻娼伴弫缈犵秼闁插洨鏁?Spotify 缂冩垿銆夐悧鍫濈埗鐟欎胶娈戞稉澶嬵唽瀵繒绮ㄩ弸鍕剁窗
-
-- 瀹革缚鏅堕崶鍝勭暰鐎佃壈鍩呴弽蹇ョ窗鐠愮喕鐭楁い鐢告桨閸掑洦宕查妴渚€鐓舵稊鎰氨閹芥顩﹂崪宀€鏁ら幋铚備繆閹垰鐫嶇粈?- 娑擃參妫挎稉璇插敶鐎圭懓灏敍姘崇鐠愶絽鐫嶇粈娲浕妞ょ偣鈧焦鐡曢弴鎻掑灙鐞涖劊鈧焦鐡曢崡鏇☆嚊閹懎鎷伴幘顓熸杹妞?- 鎼存洟鍎撮崗銊ョ湰閹绢厽鏂侀崳顭掔窗鐠愮喕鐭楅崷銊ゆ崲閹板繘銆夐棃顫瑓閹镐胶鐢婚幒褍鍩楄ぐ鎾冲闂婂厖绠伴幘顓熸杹
-
-閸︺劌顔旂仦蹇斿剰閸愬吀绗呴敍宀勩€夐棃銏犲礁娓氀嗙箷婢х偛濮炴禍鍡曚繆閹垱鐖敍宀€鏁ゆ禍搴㈡▔缁€鐚寸窗
-
-- 瑜版挸澧犻幘顓熸杹濮濆本娲搁幗妯款洣
-- 瑜版挸澧犻幘顓熸杹鏉╂稑瀹虫０鍕潔
-- 閺堚偓鏉╂垶鎸遍弨鎯ф彥閹瑰嘲鍙嗛崣?
-鏉╂瑧顫掔敮鍐ㄧ湰閺勫孩妯夐幓鎰磳娴滃棛缍夋い鐢殿伂闂婂厖绠伴幘顓熸杹閸ｃ劎娈戦垾婊€楠囬崫浣瑰妳閳ユ繐绱濇稊鐔告纯缁楋箑鎮?Spotify Web 閻ㄥ嫯顫嬬憴澶屽瀵颁降鈧?
-### 缂佸嫪娆㈤弽宄扮础鐠佹崘顓?
-#### 1. 瀹革缚鏅剁€佃壈鍩呴弽蹇旂壉瀵?
-瀹革缚鏅剁€佃壈鍩呴弽蹇涘櫚閻劍绻侀懝鎻掑磹闁繑妲戦棃銏℃緲閿涘瞼绮ㄩ崥鍫濇妇鐟欐帒鎷板В娑氬箵閻犲啯鏅ラ弸婊愮礉鐎圭偟骞囬敍?
-- 瑜版挸澧犳い鐢告桨妤傛ü瀵掗弰鍓с仛
-- 闂婂厖绠版惔鎾蹭繆閹垯绗岄悽銊﹀煕娣団剝浼呴崡锛勫閸栨牕鐫嶇粈?- 鐎佃壈鍩呮稉搴″敶鐎圭懓灏ぐ銏″灇濞撳懏娅氶崚鍡樼埉
-
-#### 2. 妞ゅ爼鍎撮弽蹇旂壉瀵?
-妞ゅ爼鍎撮弽蹇庣秴娴滃簼瀵岄崘鍛啇閸栨椽銆婇柈顭掔礉閻劋绨弰鍓с仛妞ょ敻娼伴弽鍥暯閵嗕礁鍙忕仦鈧幖婊呭偍濡楀棗鎷伴悩鑸碘偓浣瑰絹缁€杞颁繆閹垽绱濇稉鏄忣洣娴ｆ粎鏁ら崠鍛閿?
-- 瀵搫瀵叉い鐢告桨鐏炲倻楠?- 閹绘劒绶电紒鐔剁閹兼粎鍌ㄩ崗銉ュ經
-- 鐏炴洜銇氱化鑽ょ埠瑜版挸澧犻悩鑸碘偓?
-#### 3. 閹恒劏宕橀崡锛勫閺嶅嘲绱?
-妫ｆ牠銆夐幒銊ㄥ礃閸愬懎顔愭担璺ㄦ暏鐏忎線娼伴崡锛勫閺嶅嘲绱￠敍灞煎瘜鐟曚胶澹掗悙鐟板瘶閹奉剨绱?
-- 婢堆冪殱闂堛垹娴橀悧?- 閸楋紕澧栭幃顒佽癁妤傛ü瀵掗弫鍫熺亯
-- 缂佽儻澹婂ù顔煎З閹绢厽鏂侀幐澶愭尦
-- 缁犫偓濞蹭胶娈戦弽鍥暯娑撳骸澹囬弽鍥暯鐏炲倻楠?
-鏉╂瑧顫掗崡锛勫閺囨挳鈧倸鎮庣仦鏇犮仛閹恒劏宕橀崘鍛啇閸滃瞼绨块柅澶婂瀻閸栨亽鈧?
-#### 4. 閺囪尙娲扮悰灞剧壉瀵?
-濮濆本娲告い鐐光偓浣规付鏉╂垶鎸遍弨鎯ф嫲濮濆苯宕熸い鍏稿瘜鐟曚椒濞囬悽銊γ崥鎴炴锤閻╊喛顢戦弽宄扮础閿涘瞼澹掗悙鐟板瘶閹奉剨绱?
-- 瀹革缚鏅剁亸渚€娼伴妴浣圭垼妫版ǜ鈧焦鐡曢幍瀣╀繆閹?- 娑擃參妫块弰鍓с仛娑撴捁绶幋鏍閸旂姳淇婇幁?- 閸欏厖鏅堕幓鎰返閹绢厽鏂侀崪宀€顓搁悶鍡樻惙娴?- 姒х姵鐖ｉ幃顒€浠犻弮鍫曠彯娴滎喛顢戦懗灞炬珯
-
-鏉╂瑦顒滈弰?Spotify Web 娑擃厽娓堕崗绋跨€烽惃鍕敶鐎圭懓鐫嶇粈鐑樻煙瀵繋绠ｆ稉鈧妴?
-#### 5. 鎼存洟鍎撮幘顓熸杹閸ｃ劍鐗卞?
-鎼存洟鍎撮幘顓熸杹閸ｃ劍鐖弰顖涙殻娑擃亞鏅棃銏㈡畱閺嶇绺鹃崠鍝勭厵閿涘矂鍣伴悽銊ユ祼鐎规艾鐣炬担宥呰嫙鐠愵垳鈹涢崗銊ョ湰閿涘奔瀵岀憰浣稿瘶閹奉剨绱?
-- 瑜版挸澧犲灞炬锤鐏忎線娼版稉搴㈢摃閺囪弓淇婇幁?- 娑撳﹣绔存＃鏍モ偓浣规尡閺€?/ 閺嗗倸浠犻妴浣风瑓娑撯偓妫ｆ牗甯堕崚鑸靛瘻闁?- 閹绢厽鏂佹潻娑樺閺夆€虫嫲閺冨爼妫块弰鍓с仛
-- 闂婃娊鍣洪幒褍鍩楀鎴濇健
-
-鏉╂瑩鍎撮崚鍡樻Ц閺佺繝閲滅化鑽ょ埠閺堚偓閼虫垝缍嬮悳鎵斥偓婊堢叾娑旀劖鎸遍弨鎯ф珤缂冩垿銆夐崠鏍︾秼妤犲备鈧繄娈戦崠鍝勭厵閵?
-#### 6. 閸欏厖鏅舵穱鈩冧紖閺嶅繑鐗卞?
-閸︺劌顔旂仦蹇撶鐏炩偓娑撳绱濇い鐢告桨閸欏厖鏅舵晶鐐插娣団剝浼呴弽蹇ョ礉閻劋绨潏鍛И鐏炴洜銇氶敍?
-- 瑜版挸澧犻幘顓熸杹濮濆本娲哥亸渚€娼伴崪灞剧垼妫?- 瑜版挸澧犻幘顓熸杹鏉╂稑瀹虫０鍕潔
-- 閺堚偓鏉╂垶鎸遍弨鎯ф彥閹瑰嘲鍨悰?
-鏉╂瑩鍎撮崚鍡曠瑝閺勵垵顕崇粙瀣洣濮瑰倷鑵戦惃鍕箑妞ゅ銆嶉敍灞肩稻閼宠棄顧勯弰搴㈡▔閹绘劕宕岄弫缈犵秼鐢啫鐪€瑰本鏆ｉ幀褍鎷扮仦鏇犮仛閺佸牊鐏夐妴?
-### 閸濆秴绨插蹇氼啎鐠?
-閾忕晫鍔фい鍦窗娑撹崵娲伴弽鍥ㄦЦ閸嬫碍鍨?Spotify 缂冩垿銆夐悧鍫ヮ棑閺嶇》绱濇担鍡曠矝娣囨繄鏆€閸╄櫣顢呴崫宥呯安瀵繘鈧倿鍘ら敍?
-- 娑擃厾鐡戠€硅棄瀹虫稉瀣閽樺繐褰告笟褌淇婇幁顖涚埉
-- 缁愬嫬鐫嗘稉瀣殺閸ュ搫鐣剧敮鍐ㄧ湰閸掑洦宕叉稉杞扮瑐娑撳鐖㈤崣鐘茬鐏炩偓
-- 鎼存洟鍎撮幘顓熸杹閸ｃ劋绮涙穱婵囧瘮閸欘垵顫嗛獮璺哄讲閹垮秳缍?- 閺囪尙娲伴崚妤勩€冩稉搴㈡惙娴ｆ粌灏崷銊ョ毈鐏炲繋绗呴弨閫涜礋缁鹃潧鎮滈幒鎺戝灙
-
-鏉╂瑦鐗遍弮銏ｅ厴閸忓ジ銆愭径褍鐫嗙仦鏇犮仛閿涘奔绡冮懗鎴掔箽鐠囦焦娅橀柅姘辩應鐠佺増婀伴崪宀冪窛缁愬嫭绁荤憴鍫濇珤缁愭褰涙稉瀣畱閸欘垳鏁ら幀褋鈧?
-## 閸撳秶顏€圭偟骞囬幀鑽ょ波
-
-閺堫剚顐奸崜宥囶伂閺€鍦娑撴槒顩︽担鎾跺箛娴滃棔浜掓稉瀣嚦缁嬪绗岀拋鎹愵吀鐟曚胶鍋ｉ敍?
-- 娴ｈ法鏁?Vue 缂佸嫪娆㈤崠鏍ㄢ偓婵囧厒缂佸嫮绮愭い鐢告桨閸滃苯鍙曢崗鍗炵潔缁€鍝勫礋閸?- 娴ｈ法鏁?Vue Router 娴ｆ粈璐熼崝鐔诲厴濡€虫健閸掑洦宕茬€圭懓娅?- 娴ｈ法鏁?HTML5 Audio 鐎圭偟骞囬棅鍏呯閹绢厽鏂侀崝鐔诲厴
-- 娣囨繃瀵旈崜宥呮倵缁旑垱甯撮崣锝勭瑝閸欐﹫绱濇禒鍛磳缁狙呮櫕闂堛垼銆冮悳?- 闁俺绻冨ǎ杈娑撳顣介妴浣瑰腹閼芥劕宕遍悧鍥モ偓浣规锤閻╊喛顢戦崪灞界俺闁劍鎸遍弨鎯ф珤鐎圭偟骞?Spotify Web 妞嬪孩鐗?
-娴犲氦顕崇粙瀣€嶉惄顔款潡鎼达妇婀呴敍宀冪箹娑撯偓閻楀牊婀伴惄鍛婄槷閺咁噣鈧岸銆夐棃銏犵鐏炩偓閺囨潙鍙挎禍褍鎼ч幇鐔锋嫲鐏炴洜銇氶弫鍫熺亯閿涘苯鎮撻弮鑸电梾閺堝鐗崸蹇撳斧閺堝娈?Java 閸氬海顏稉?JDBC 娑撴艾濮熺€圭偟骞囬敍宀勨偓鍌氭値娴ｆ粈璐熺拠鍓р柤缁涙棁浜崪灞界潔缁€铏瑰閺堫兙鈧?
-## 閻╁瓨甯存潻鎰攽
+Compile the Java source:
 
 ```powershell
-New-Item -ItemType Directory -Force out
 javac -encoding UTF-8 -d out (Get-ChildItem -Recurse -Filter *.java | ForEach-Object { $_.FullName })
+```
+
+Start the server:
+
+```powershell
 java -cp out com.musicplayer.App
 ```
 
-閸氼垰濮╅崥搴ゎ問闂?[http://localhost:8080](http://localhost:8080)閵?
-姒涙顓诲鏃傘仛鐠愶箑褰块敍?
-- 閻劍鍩涢崥宥忕窗`student`
-- 鐎靛棛鐖滈敍姝?23456`
-
-## JDBC 閹镐椒绠欓崠鏍佸?
-閸氬海顏鑼病鐎圭偟骞?JDBC 閻楀牊鏆熼幑顔款問闂傤喓鈧倿绮拋銈勭瑝閸氼垳鏁ら敍灞炬Ц閸ョ姳璐?JDBC 妞瑰崬濮?jar 娑撳秴婀禒鎾崇氨娑擃厹鈧?
-婵″倹鐏夋担鐘侯洣閹?SQLite閿?
-1. 閸戝棗顦?`sqlite-jdbc` 妞瑰崬濮?jar
-2. 鐠佸墽鐤嗛悳顖氼暔閸欐﹢鍣?
-```powershell
-$env:MUSICPLAYER_DB_MODE="jdbc"
-$env:MUSICPLAYER_JDBC_URL="jdbc:sqlite:data/musicplayer.db"
-```
-
-3. 鏉╂劘顢戦弮鑸靛Ω妞瑰崬濮?jar 閺€鎯у弳 classpath
+If you prefer to pass the MySQL JDBC jar explicitly:
 
 ```powershell
-java -cp "out;path\to\sqlite-jdbc.jar" com.musicplayer.App
+java -cp "out;lib/mysql-connector-j-9.2.0.jar" com.musicplayer.App
 ```
 
-婵″倹鐏夌拠鍓р柤鐟曚焦鐪?MySQL閿涘奔绡冮崣顖欎簰娣囨繄鏆€瑜版挸澧犻幒銉ュ經娑撳酣銆夐棃顫瑝閸欐﹫绱濋幎?`JdbcDataStore` 閺€瑙勫灇 MySQL 閺傜鈻堥崡鍐插讲閵?
-## 鐠囧瓨妲?
-- 閸撳秶顏柅姘崇箖 CDN 閸旂姾娴?Vue 3 娑?Vue Router閿涘苯娲滃銈嗙セ鐟欏牆娅掗棁鈧憰浣藉厴婢剁喕顔栭梻顔碱嚠鎼?CDN閵?- 娑撹桨绨＄拋鈺呫€嶉惄顔肩磻缁犲崬宓嗗鏃傘仛閿涘瞼銇氭笟瀣摃閺囪弓濞囬悽銊ょ啊閺堝秴濮熺粩顖氬З閹胶鏁撻幋鎰畱 WAV 闂婃娊顣堕敍灞肩瑝娓氭繆绂嗘０婵嗩樆 mp3 閺傚洣娆㈤妴?- 閺佺増宓佹惔鎾崇紦鐞涖劋绗岀粔宥呯摍閺佺増宓侀崣鍌濃偓鍐潌 `database/schema.sql` 閸?`database/seed.sql`閵
+Open the app in the browser:
+
+- [http://localhost:8080](http://localhost:8080)
+
+## Main API Endpoints
+
+- `POST /api/auth/login`
+- `POST /api/auth/register`
+- `GET /api/songs`
+- `POST /api/songs/import`
+- `GET /api/playlists`
+- `POST /api/playlists`
+- `DELETE /api/playlists/{id}`
+- `POST /api/playlists/{id}/songs`
+- `DELETE /api/playlists/{id}/songs/{songId}`
+- `GET /api/history`
+- `POST /api/history`
+- `GET /api/health`
+
+## Current Implementation Notes
+
+- `DemoAudioHandler` has been removed
+- The server no longer exposes the `/media/demo` route
+- Initial playback resources now come from repository media files only
+- Frontend structure, API paths, and database schema remain unchanged

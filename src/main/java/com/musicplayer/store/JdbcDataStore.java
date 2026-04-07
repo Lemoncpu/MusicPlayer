@@ -406,11 +406,11 @@ public final class JdbcDataStore implements DataStore {
             return;
         }
         resetLibraryData();
-        importSong("song1", "artist1", "album1", cover(1), audio(1), 240);
-        importSong("song2", "artist2", "album2", cover(2), audio(2), 240);
-        importSong("song3", "artist3", "album3", cover(3), audio(3), 240);
-        importSong("song4", "artist4", "album4", cover(4), audio(4), 240);
-        importSong("song5", "artist5", "album5", cover(5), audio(5), 240);
+        importSong("唯一", "宋雨琦", "唯一", cover(1), audio(1), 240);
+        importSong("Giant", "宋雨琦", "Giant", cover(2), audio(2), 240);
+        importSong("Radio(Dum-Dum)", "宋雨琦", "Radio(Dum-Dum)", cover(3), audio(3), 240);
+        importSong("FREAK", "宋雨琦", "FREAK", cover(4), audio(4), 240);
+        importSong("Could It Be", "宋雨琦", "Could It Be", cover(5), audio(5), 240);
     }
 
     private void ensureDefaultPlaylist(long userId) throws SQLException {
@@ -465,7 +465,7 @@ public final class JdbcDataStore implements DataStore {
                 titles.add(resultSet.getString("title"));
             }
         }
-        return titles.equals(List.of("song1", "song2", "song3", "song4", "song5"));
+        return titles.equals(List.of("唯一", "Giant", "Radio(Dum-Dum)", "FREAK", "Could It Be"));
     }
 
     private void resetLibraryData() throws SQLException {

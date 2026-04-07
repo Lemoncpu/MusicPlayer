@@ -1,7 +1,6 @@
 package com.musicplayer;
 
 import com.musicplayer.http.ApiHandler;
-import com.musicplayer.http.DemoAudioHandler;
 import com.musicplayer.http.LocalMediaHandler;
 import com.musicplayer.http.StaticFileHandler;
 import com.musicplayer.store.DataStore;
@@ -29,7 +28,6 @@ public final class App {
         HttpServer server = createServer(preferredPort);
         int actualPort = server.getAddress().getPort();
         server.createContext("/api", new ApiHandler(store));
-        server.createContext("/media/demo", new DemoAudioHandler());
         server.createContext("/media/uploads", new LocalMediaHandler(uploadRoot));
         server.createContext("/", new StaticFileHandler(webRoot));
         server.setExecutor(Executors.newCachedThreadPool());
@@ -40,7 +38,7 @@ public final class App {
         }));
 
         if (actualPort != preferredPort) {
-            System.out.println("端口 " + preferredPort + " 已被占用，自动切换到 " + actualPort);
+            System.out.println("Port " + preferredPort + " is unavailable, switched to " + actualPort);
         }
         System.out.println("MusicPlayer server started on http://localhost:" + actualPort);
         System.out.println("Static files: " + webRoot);
@@ -58,6 +56,6 @@ public final class App {
                 lastError = e;
             }
         }
-        throw new IOException("无法绑定可用端口: " + preferredPort + "-" + (preferredPort + 19), lastError);
+        throw new IOException("No available port in range: " + preferredPort + "-" + (preferredPort + 19), lastError);
     }
 }

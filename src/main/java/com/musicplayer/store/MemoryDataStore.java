@@ -134,11 +134,11 @@ public final class MemoryDataStore implements DataStore {
 
     private void seed() {
         UserSession demoUser = register("student", "123456");
-        importSong("Campus Sunrise", "Course Band", "Semester Beats", cover(1), "/media/demo/1.wav", 8);
-        importSong("Library Lo-Fi", "Study Crew", "Focus Session", cover(2), "/media/demo/2.wav", 8);
-        importSong("Route To Finals", "Night Coders", "Deadline Mix", cover(3), "/media/demo/3.wav", 8);
-        importSong("Weekend Refactor", "Merge Conflict", "Build Success", cover(4), "/media/demo/4.wav", 8);
-        importSong("Fresh Deploy", "Blue Screeners", "Hotfix Dreams", cover(5), "/media/demo/5.wav", 8);
+        importSong("song1", "artist1", "album1", cover(1), audio(1), 240);
+        importSong("song2", "artist2", "album2", cover(2), audio(2), 240);
+        importSong("song3", "artist3", "album3", cover(3), audio(3), 240);
+        importSong("song4", "artist4", "album4", cover(4), audio(4), 240);
+        importSong("song5", "artist5", "album5", cover(5), audio(5), 240);
         Playlist playlist = createPlaylist(demoUser.id(), "我的收藏");
         addSongToPlaylist(playlist.id(), 1L);
         addSongToPlaylist(playlist.id(), 3L);
@@ -147,7 +147,11 @@ public final class MemoryDataStore implements DataStore {
     }
 
     private static String cover(int seed) {
-        return "https://picsum.photos/seed/musicplayer-" + seed + "/480/480";
+        return "/media/uploads/covers/song" + seed + ".jpg";
+    }
+
+    private static String audio(int seed) {
+        return "/media/uploads/audio/song" + seed + ".mp3";
     }
 
     private void ensureUser(long userId) {
