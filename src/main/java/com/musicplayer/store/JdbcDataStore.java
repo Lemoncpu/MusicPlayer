@@ -4,6 +4,7 @@ import com.musicplayer.model.PlayHistoryEntry;
 import com.musicplayer.model.Playlist;
 import com.musicplayer.model.Song;
 import com.musicplayer.model.UserSession;
+import com.musicplayer.util.PasswordUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +28,7 @@ public final class JdbcDataStore implements DataStore {
         this.user = user;
         this.password = password;
         initializeSchema();
+        resetLegacyUsersIfNeeded();
         initializeFixedLibrary();
     }
 
@@ -37,18 +39,19 @@ public final class JdbcDataStore implements DataStore {
                 check.setString(1, username);
                 try (ResultSet resultSet = check.executeQuery()) {
                     if (resultSet.next()) {
-                        throw new IllegalArgumentException("用户名已存在");
+                        throw new IllegalArgumentException("Username already exists");
                     }
                 }
             }
 
-            String displayName = "用户" + username;
+            String displayName = "User " + username;
+            String passwordHash = PasswordUtil.hashPassword(passwordValue);
             try (PreparedStatement insert = connection.prepareStatement(
                 "INSERT INTO app_user(username, password, display_name) VALUES (?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS
             )) {
                 insert.setString(1, username);
-                insert.setString(2, passwordValue);
+                insert.setString(2, passwordHash);
                 insert.setString(3, displayName);
                 insert.executeUpdate();
                 try (ResultSet keys = insert.getGeneratedKeys()) {
@@ -57,9 +60,9 @@ public final class JdbcDataStore implements DataStore {
                     }
                 }
             }
-            throw new IllegalStateException("注册失败");
+            throw new IllegalStateException("Register failed");
         } catch (SQLException e) {
-            throw new IllegalStateException("数据库错误: " + e.getMessage(), e);
+            throw new IllegalStateException("Database operation failed: " + e.getMessage(), e);
         }
     }
 
@@ -67,21 +70,25 @@ public final class JdbcDataStore implements DataStore {
     public UserSession login(String username, String passwordValue) {
         try (Connection connection = open();
              PreparedStatement statement = connection.prepareStatement(
-                 "SELECT id, username, display_name FROM app_user WHERE username = ? AND password = ?"
+                 "SELECT id, username, password, display_name FROM app_user WHERE username = ?"
              )) {
             statement.setString(1, username);
-            statement.setString(2, passwordValue);
             try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new UserSession(
-                        resultSet.getLong("id"),
-                        resultSet.getString("username"),
-                        resultSet.getString("display_name")
-                    );
+                if (!resultSet.next()) {
+                    throw new IllegalArgumentException("User not registered");
                 }
+                String storedPassword = resultSet.getString("password");
+                if (!PasswordUtil.verifyPassword(passwordValue, storedPassword)) {
+                    throw new IllegalArgumentException("Wrong password");
+                }
+                return new UserSession(
+                    resultSet.getLong("id"),
+                    resultSet.getString("username"),
+                    resultSet.getString("display_name")
+                );
             }
-            throw new IllegalArgumentException("用户名或密码错误");
         } catch (SQLException e) {
+
             throw new IllegalStateException("数据库错误: " + e.getMessage(), e);
         }
     }
@@ -336,7 +343,7 @@ public final class JdbcDataStore implements DataStore {
                 CREATE TABLE IF NOT EXISTS app_user (
                     id BIGINT PRIMARY KEY AUTO_INCREMENT,
                     username VARCHAR(100) NOT NULL UNIQUE,
-                    password VARCHAR(255) NOT NULL,
+                    password VARCHAR(512) NOT NULL,
                     display_name VARCHAR(100) NOT NULL
                 )
                 """);
@@ -379,6 +386,27 @@ public final class JdbcDataStore implements DataStore {
                     CONSTRAINT fk_history_song FOREIGN KEY (song_id) REFERENCES song(id) ON DELETE CASCADE
                 )
                 """);
+            statement.execute("ALTER TABLE app_user MODIFY COLUMN password VARCHAR(512) NOT NULL");
+        }
+    }
+
+    private void resetLegacyUsersIfNeeded() throws SQLException {
+        boolean resetNeeded = false;
+        try (Connection connection = open();
+             PreparedStatement statement = connection.prepareStatement("SELECT password FROM app_user");
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                if (!PasswordUtil.isHashed(resultSet.getString("password"))) {
+                    resetNeeded = true;
+                    break;
+                }
+            }
+        }
+        if (!resetNeeded) {
+            return;
+        }
+        try (Connection connection = open(); Statement delete = connection.createStatement()) {
+            delete.executeUpdate("DELETE FROM app_user");
         }
     }
 

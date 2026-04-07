@@ -71,11 +71,13 @@ Startup behavior:
 3. Check whether the `song` table contains exactly `song1` to `song5`
 4. If not, clear built-in song-related data and rebuild the fixed five-song library
 5. Recreate the default user, default playlist, and default play history
+6. Store user passwords as PBKDF2 hashes instead of plaintext
 
 Default account:
 
 - Username: `student`
 - Password: `123456`
+- Stored form: PBKDF2 hash only, never plaintext
 
 ## Memory Mode
 
@@ -133,3 +135,11 @@ Open the app in the browser:
 - The server no longer exposes the `/media/demo` route
 - Initial playback resources now come from repository media files only
 - Frontend structure, API paths, and database schema remain unchanged
+
+## Password Security
+
+User passwords are hashed with `PBKDF2WithHmacSHA256` using a random salt and stored in the `app_user.password` column as a structured value:
+
+- `pbkdf2$<iterations>$<saltBase64>$<hashBase64>`
+
+The backend never stores the original plaintext password in the database. When this version starts against older plaintext JDBC user data, it clears legacy user records and recreates the default account with a hashed password.

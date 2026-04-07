@@ -4,6 +4,7 @@ import com.musicplayer.model.PlayHistoryEntry;
 import com.musicplayer.model.Playlist;
 import com.musicplayer.model.Song;
 import com.musicplayer.model.UserSession;
+import com.musicplayer.util.PasswordUtil;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public final class MemoryDataStore implements DataStore {
     @Override
     public synchronized UserSession login(String username, String password) {
         return users.values().stream()
-            .filter(user -> user.username.equalsIgnoreCase(username) && user.password.equals(password))
+            .filter(user -> user.username.equalsIgnoreCase(username) && PasswordUtil.verifyPassword(password, user.passwordHash))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("用户名或密码错误"))
             .toSession();
@@ -184,7 +185,7 @@ public final class MemoryDataStore implements DataStore {
         return new Playlist(playlist.id, playlist.userId, playlist.name, playlistSongs);
     }
 
-    private record LocalUser(long id, String username, String password, String displayName) {
+    private record LocalUser(long id, String username, String passwordHash, String displayName) {
         private UserSession toSession() {
             return new UserSession(id, username, displayName);
         }
