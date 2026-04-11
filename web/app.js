@@ -4,59 +4,65 @@ const { createRouter, createWebHashHistory, useRoute, useRouter } = VueRouter;
 const I18N = {
   zh: {
     app: "Music Player",
-    home: "首页",
-    songs: "歌曲",
-    playlists: "歌单",
-    now: "正在播放",
-    login: "登录",
-    loginTitle: "欢迎回来",
-    loginText: "登录后即可查看曲库、歌单与播放记录。",
-    registerText: "注册新账号，立即开始使用。",
-    username: "用户名",
-    password: "密码",
-    search: "搜索歌曲、歌手或专辑",
-    welcome: "欢迎回来",
-    featured: "精选歌曲",
-    history: "最近播放",
-    continueListen: "继续收听",
-    library: "歌曲曲库",
-    importLocal: "导入本地歌曲",
-    title: "歌名",
-    artist: "歌手",
-    album: "专辑",
-    duration: "时长（秒）",
-    audio: "音频文件",
-    cover: "封面文件",
-    createPlaylist: "新建歌单",
-    playlistName: "歌单名称",
-    addSong: "添加歌曲",
-    remove: "移除",
-    delete: "删除",
-    chooseSong: "选择歌曲",
-    play: "播放",
-    pause: "暂停",
-    prev: "上一首",
-    next: "下一首",
-    logout: "退出登录",
-    volume: "音量",
-    noSongs: "当前暂无歌曲。",
-    noHistory: "暂无播放记录。",
-    noPlaylists: "还没有歌单。",
-    noCurrent: "暂无正在播放的歌曲",
-    queue: "可立即播放",
-    statusReady: "已准备好探索你的音乐。",
-    statusLoaded: "数据已加载完成。",
-    imported: "歌曲导入成功。",
-    playlistCreated: "歌单创建成功。",
-    playlistDeleted: "歌单已删除。",
-    playlistAdded: "歌曲已添加到歌单。",
-    playlistRemoved: "歌曲已从歌单移除。",
-    loggedIn: "登录成功。",
-    registered: "注册成功。",
-    loggedOut: "已退出登录。",
-    badFiles: "请同时选择音频和封面文件。",
-    fallbackUser: "音乐用户",
-    switchLanguage: "Switch Language"
+    home: "\u9996\u9875",
+    songs: "\u6b4c\u66f2",
+    playlists: "\u6b4c\u5355",
+    now: "\u6b63\u5728\u64ad\u653e",
+    login: "\u767b\u5f55",
+    register: "\u6ce8\u518c",
+    loginTitle: "\u6b22\u8fce\u56de\u6765",
+    loginText: "\u767b\u5f55\u540e\u5373\u53ef\u67e5\u770b\u66f2\u5e93\u3001\u6b4c\u5355\u4e0e\u64ad\u653e\u8bb0\u5f55\u3002",
+    registerText: "\u521b\u5efa\u65b0\u8d26\u53f7\uff0c\u6ce8\u518c\u6210\u529f\u540e\u8bf7\u8fd4\u56de\u767b\u5f55\u3002",
+    username: "\u7528\u6237\u540d",
+    password: "\u5bc6\u7801",
+    confirmPassword: "\u786e\u8ba4\u5bc6\u7801",
+    search: "\u641c\u7d22\u6b4c\u66f2\u3001\u6b4c\u624b\u6216\u4e13\u8f91",
+    welcome: "\u6b22\u8fce\u56de\u6765",
+    featured: "\u7cbe\u9009\u6b4c\u66f2",
+    history: "\u6700\u8fd1\u64ad\u653e",
+    continueListen: "\u7ee7\u7eed\u6536\u542c",
+    library: "\u6b4c\u66f2\u66f2\u5e93",
+    importLocal: "\u5bfc\u5165\u672c\u5730\u6b4c\u66f2",
+    title: "\u6b4c\u540d",
+    artist: "\u6b4c\u624b",
+    album: "\u4e13\u8f91",
+    duration: "\u65f6\u957f\uff08\u79d2\uff09",
+    audio: "\u97f3\u9891\u6587\u4ef6",
+    cover: "\u5c01\u9762\u6587\u4ef6",
+    createPlaylist: "\u65b0\u5efa\u6b4c\u5355",
+    playlistName: "\u6b4c\u5355\u540d\u79f0",
+    addSong: "\u6dfb\u52a0\u6b4c\u66f2",
+    remove: "\u79fb\u9664",
+    delete: "\u5220\u9664",
+    chooseSong: "\u9009\u62e9\u6b4c\u66f2",
+    play: "\u64ad\u653e",
+    pause: "\u6682\u505c",
+    prev: "\u4e0a\u4e00\u9996",
+    next: "\u4e0b\u4e00\u9996",
+    logout: "\u9000\u51fa\u767b\u5f55",
+    volume: "\u97f3\u91cf",
+    noSongs: "\u5f53\u524d\u6682\u65e0\u6b4c\u66f2\u3002",
+    noHistory: "\u6682\u65e0\u64ad\u653e\u8bb0\u5f55\u3002",
+    noPlaylists: "\u8fd8\u6ca1\u6709\u6b4c\u5355\u3002",
+    noCurrent: "\u6682\u65e0\u6b63\u5728\u64ad\u653e\u7684\u6b4c\u66f2",
+    queue: "\u5373\u5c06\u64ad\u653e",
+    statusReady: "\u5df2\u51c6\u5907\u597d\u63a2\u7d22\u4f60\u7684\u97f3\u4e50\u3002",
+    statusLoaded: "\u6570\u636e\u5df2\u52a0\u8f7d\u5b8c\u6210\u3002",
+    imported: "\u6b4c\u66f2\u5bfc\u5165\u6210\u529f\u3002",
+    playlistCreated: "\u6b4c\u5355\u521b\u5efa\u6210\u529f\u3002",
+    playlistDeleted: "\u6b4c\u5355\u5df2\u5220\u9664\u3002",
+    playlistAdded: "\u6b4c\u66f2\u5df2\u6dfb\u52a0\u5230\u6b4c\u5355\u3002",
+    playlistRemoved: "\u6b4c\u66f2\u5df2\u4ece\u6b4c\u5355\u79fb\u9664\u3002",
+    loggedIn: "\u767b\u5f55\u6210\u529f\u3002",
+    registered: "\u6ce8\u518c\u6210\u529f\uff0c\u8bf7\u4f7f\u7528\u65b0\u8d26\u53f7\u767b\u5f55\u3002",
+    loggedOut: "\u5df2\u9000\u51fa\u767b\u5f55\u3002",
+    badFiles: "\u8bf7\u540c\u65f6\u9009\u62e9\u97f3\u9891\u548c\u5c01\u9762\u6587\u4ef6\u3002",
+    fallbackUser: "\u97f3\u4e50\u7528\u6237",
+    switchLanguageEn: "Switch Language",
+    switchLanguageZh: "\u5207\u6362\u8bed\u8a00",
+    passwordRule: "\u5bc6\u7801\u81f3\u5c11 8 \u4f4d\uff0c\u4e14\u5fc5\u987b\u5305\u542b\u5b57\u6bcd\u548c\u6570\u5b57\u3002",
+    passwordMismatch: "\u4e24\u6b21\u8f93\u5165\u7684\u5bc6\u7801\u4e0d\u4e00\u81f4\u3002",
+    noSearchResults: "\u6682\u65e0\u5339\u914d\u7ed3\u679c\u3002"
   },
   en: {
     app: "Music Player",
@@ -65,11 +71,13 @@ const I18N = {
     playlists: "Playlists",
     now: "Now Playing",
     login: "Login",
+    register: "Register",
     loginTitle: "Welcome Back",
     loginText: "Log in to access your music library, playlists and history.",
-    registerText: "Register a new account to get started.",
+    registerText: "Create a new account. After registration, please log in to continue.",
     username: "Username",
     password: "Password",
+    confirmPassword: "Confirm Password",
     search: "Search songs, artists or albums",
     welcome: "Welcome back",
     featured: "Featured Songs",
@@ -108,23 +116,26 @@ const I18N = {
     playlistAdded: "Song added to playlist.",
     playlistRemoved: "Song removed from playlist.",
     loggedIn: "Login successful.",
-    registered: "Registration successful.",
+    registered: "Registration successful. Please log in with your new account.",
     loggedOut: "Logged out successfully.",
     badFiles: "Please select both audio and cover files.",
     fallbackUser: "Music User",
-    switchLanguage: "切换语言"
+    switchLanguageEn: "Switch Language",
+    switchLanguageZh: "\u5207\u6362\u8bed\u8a00",
+    passwordRule: "Password must be at least 8 characters long and include both letters and numbers.",
+    passwordMismatch: "The two passwords do not match.",
+    noSearchResults: "No matching songs found."
   }
 };
 
+const PASSWORD_RULE = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 const langKey = "musicplayer-language";
 const storageKey = "musicplayer-current-user";
 
-const i18n = reactive({
-  lang: localStorage.getItem(langKey) || "zh"
-});
-
+const i18n = reactive({ lang: localStorage.getItem(langKey) || "zh" });
 const T = computed(() => I18N[i18n.lang]);
 
+function setLanguage(lang) { i18n.lang = lang === "en" ? "en" : "zh"; }
 function normalizeUser(user) {
   if (!user) return null;
   return { ...user, displayName: (user.displayName || user.username || I18N.zh.fallbackUser).trim() };
@@ -140,22 +151,25 @@ function formatTime(v) {
   return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
 }
 function subtitle(song) { return [song.artist, song.album].filter(Boolean).join(" · "); }
-function greeting() { const h = new Date().getHours(); return h < 12 ? "上午好" : h < 18 ? "下午好" : "晚上好"; }
+function greeting() {
+  const h = new Date().getHours();
+  if (i18n.lang === "en") return h < 12 ? "Good Morning" : h < 18 ? "Good Afternoon" : "Good Evening";
+  return h < 12 ? "\u4e0a\u5348\u597d" : h < 18 ? "\u4e0b\u5348\u597d" : "\u665a\u4e0a\u597d";
+}
+function isValidRegistrationPassword(password) { return PASSWORD_RULE.test(String(password || "")); }
 
-watch(() => i18n.lang, (newLang) => {
-  localStorage.setItem(langKey, newLang);
-});
+watch(() => i18n.lang, (newLang) => { localStorage.setItem(langKey, newLang); });
 
 const state = reactive({
   currentUser: loadStoredUser(), songs: [], playlists: [], history: [], currentSong: null, currentIndex: -1,
   isPlaying: false, currentTime: 0, duration: 0, volume: 0.72, search: "", loading: false, statusMessage: ""
 });
 
-watch(() => T.value.statusReady, (v) => { if (!state.statusMessage) state.statusMessage = v; }, { immediate: true });
+watch(() => T.value.statusReady, (v) => {
+  if (!state.statusMessage || state.statusMessage === I18N.zh.loggedOut || state.statusMessage === I18N.en.loggedOut) state.statusMessage = v;
+}, { immediate: true });
 
-function setErrorMessage(error) {
-  state.statusMessage = error && error.message ? error.message : "Request failed.";
-}
+function setErrorMessage(error) { state.statusMessage = error && error.message ? error.message : "Request failed."; }
 
 const audio = new Audio();
 audio.volume = state.volume;
@@ -186,7 +200,6 @@ const api = {
   listHistory: (userId) => apiFetch(`/api/history?userId=${encodeURIComponent(userId)}`),
   recordHistory: (userId, songId) => apiFetch("/api/history", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" }, body: formBody({ userId, songId }) })
 };
-
 const player = {
   async bootstrap() {
     state.loading = true;
@@ -223,8 +236,15 @@ const player = {
   setVolume(v) { state.volume = Number(v || 0); },
   async auth(username, password, mode) {
     const data = await (mode === "register" ? api.register(username, password) : api.login(username, password));
-    state.currentUser = normalizeUser(data.user); saveUser(state.currentUser); await this.refreshCollections();
-    state.statusMessage = mode === "register" ? T.value.registered : T.value.loggedIn;
+    if (mode === "register") {
+      state.statusMessage = T.value.registered;
+      return data.user || null;
+    }
+    state.currentUser = normalizeUser(data.user);
+    saveUser(state.currentUser);
+    await this.refreshCollections();
+    state.statusMessage = T.value.loggedIn;
+    return state.currentUser;
   },
   logout() {
     audio.pause(); audio.src = ""; clearUser();
@@ -266,11 +286,7 @@ const HomePage = {
     return { state, featured, continueSongs, greeting, player };
   },
   template: `
-    <section class="page-stack">
-      <section class="hero-banner"><div><span class="eyebrow">{{ greeting() }}</span><h2>{{ $root.T.featured }}</h2><p>{{ $root.T.featured }}</p><div class="hero-actions"><button class="primary-button pill-cta" type="button" @click="player.toggle()">{{ state.isPlaying ? $root.T.pause : $root.T.play }}</button><button class="ghost-button pill-cta" type="button" @click="$router.push('/songs')">{{ $root.T.songs }}</button></div></div><div class="auth-badges"><span>{{ $root.T.library }}</span><span>{{ $root.T.importLocal }}</span><span>{{ $root.T.playlists }}</span></div></section>
-      <section class="content-section"><div class="section-head"><div><span>{{ $root.T.featured }}</span><h3>{{ $root.T.featured }}</h3></div></div><div class="card-grid four-up"><SongCard v-for="song in featured" :key="song.id" :song="song" @play="player.playSong" /></div><p v-if="!featured.length" class="empty-text">{{ $root.T.noSongs }}</p></section>
-      <section class="split-section"><div class="content-section"><div class="section-head"><div><span>{{ $root.T.continueListen }}</span><h3>{{ $root.T.continueListen }}</h3></div></div><div class="card-grid four-up"><SongCard v-for="song in continueSongs" :key="'c'+song.id" :song="song" @play="player.playSong" /></div><p v-if="!continueSongs.length" class="empty-text">{{ $root.T.noHistory }}</p></div><div class="content-section"><div class="section-head compact-head"><div><span>{{ $root.T.history }}</span><h3>{{ $root.T.history }}</h3></div></div><div class="track-list"><TrackRow v-for="(item,index) in state.history.slice(0,5)" :key="item.id" :song="item.song" :index="index+1" @play="player.playSong" /></div><p v-if="!state.history.length" class="empty-text">{{ $root.T.noHistory }}</p></div></section>
-    </section>
+    <section class="page-stack"><section class="hero-banner"><div><span class="eyebrow">{{ greeting() }}</span><h2>{{ $root.T.featured }}</h2><p>{{ $root.T.continueListen }}</p><div class="hero-actions"><button class="primary-button pill-cta" type="button" @click="player.toggle()">{{ state.isPlaying ? $root.T.pause : $root.T.play }}</button><button class="ghost-button pill-cta" type="button" @click="$router.push('/songs')">{{ $root.T.songs }}</button></div></div><div class="auth-badges"><span>{{ $root.T.library }}</span><span>{{ $root.T.importLocal }}</span><span>{{ $root.T.playlists }}</span></div></section><section class="content-section"><div class="section-head"><div><span>{{ $root.T.featured }}</span><h3>{{ $root.T.featured }}</h3></div></div><div class="card-grid four-up"><SongCard v-for="song in featured" :key="song.id" :song="song" @play="player.playSong" /></div><p v-if="!featured.length" class="empty-text">{{ $root.T.noSongs }}</p></section><section class="split-section"><div class="content-section"><div class="section-head"><div><span>{{ $root.T.continueListen }}</span><h3>{{ $root.T.continueListen }}</h3></div></div><div class="card-grid four-up"><SongCard v-for="song in continueSongs" :key="'c'+song.id" :song="song" @play="player.playSong" /></div><p v-if="!continueSongs.length" class="empty-text">{{ $root.T.noHistory }}</p></div><div class="content-section"><div class="section-head compact-head"><div><span>{{ $root.T.history }}</span><h3>{{ $root.T.history }}</h3></div></div><div class="track-list"><TrackRow v-for="(item,index) in state.history.slice(0,5)" :key="item.id" :song="item.song" :index="index+1" @play="player.playSong" /></div><p v-if="!state.history.length" class="empty-text">{{ $root.T.noHistory }}</p></div></section></section>
   `
 };
 
@@ -295,14 +311,9 @@ const SongsPage = {
     return { state, form, submitting, setAudio, setCover, submit, player };
   },
   template: `
-    <section class="page-stack">
-      <section class="hero-banner"><div><span class="eyebrow">{{ $root.T.songs }}</span><h2>{{ $root.T.importLocal }}</h2><p>{{ $root.T.importLocal }}</p></div><div class="hero-stat-row"><div class="history-chip"><img :src="state.songs[0] ? state.songs[0].coverUrl : 'data:,'" alt=""><span>{{ state.songs.length }} {{ $root.T.songs }}</span></div></div></section>
-      <section class="toolbar-card"><div class="section-head"><div><span>{{ $root.T.importLocal }}</span><h3>{{ $root.T.importLocal }}</h3></div><p class="section-note">{{ $root.T.audio }} & {{ $root.T.cover }}</p></div><div class="import-grid"><input v-model.trim="form.title" :placeholder="$root.T.title"><input v-model.trim="form.artist" :placeholder="$root.T.artist"><input v-model.trim="form.album" :placeholder="$root.T.album"><input v-model.trim="form.durationSeconds" type="number" min="0" :placeholder="$root.T.duration"><label class="file-field"><span>{{ $root.T.audio }}</span><input type="file" accept="audio/*" @change="setAudio"></label><label class="file-field"><span>{{ $root.T.cover }}</span><input type="file" accept="image/*" @change="setCover"></label><button class="primary-button wide" type="button" :disabled="submitting" @click="submit">{{ submitting ? $root.T.importLocal : $root.T.importLocal }}</button></div></section>
-      <section class="content-section"><div class="section-head"><div><span>{{ $root.T.library }}</span><h3>{{ $root.T.library }}</h3></div><p class="section-note">{{ state.songs.length }} {{ $root.T.songs }}</p></div><div class="table-head"><span>{{ $root.T.title }}</span><span>{{ $root.T.duration }}</span></div><div class="track-list"><TrackRow v-for="(song,index) in state.songs" :key="song.id" :song="song" :index="index+1" @play="player.playSong" /></div><p v-if="!state.songs.length" class="empty-text">{{ $root.T.noSongs }}</p></section>
-    </section>
+    <section class="page-stack"><section class="hero-banner"><div><span class="eyebrow">{{ $root.T.songs }}</span><h2>{{ $root.T.importLocal }}</h2><p>{{ $root.T.importLocal }}</p></div><div class="hero-stat-row"><div class="history-chip"><img :src="state.songs[0] ? state.songs[0].coverUrl : 'data:,'" alt=""><span>{{ state.songs.length }} {{ $root.T.songs }}</span></div></div></section><section class="toolbar-card"><div class="section-head"><div><span>{{ $root.T.importLocal }}</span><h3>{{ $root.T.importLocal }}</h3></div><p class="section-note">{{ $root.T.audio }} & {{ $root.T.cover }}</p></div><div class="import-grid"><input v-model.trim="form.title" :placeholder="$root.T.title"><input v-model.trim="form.artist" :placeholder="$root.T.artist"><input v-model.trim="form.album" :placeholder="$root.T.album"><input v-model.trim="form.durationSeconds" type="number" min="0" :placeholder="$root.T.duration"><label class="file-field"><span>{{ $root.T.audio }}</span><input type="file" accept="audio/*" @change="setAudio"></label><label class="file-field"><span>{{ $root.T.cover }}</span><input type="file" accept="image/*" @change="setCover"></label><button class="primary-button wide" type="button" :disabled="submitting" @click="submit">{{ $root.T.importLocal }}</button></div></section><section class="content-section"><div class="section-head"><div><span>{{ $root.T.library }}</span><h3>{{ $root.T.library }}</h3></div><p class="section-note">{{ state.songs.length }} {{ $root.T.songs }}</p></div><div class="table-head"><span>{{ $root.T.title }}</span><span>{{ $root.T.duration }}</span></div><div class="track-list"><TrackRow v-for="(song,index) in state.songs" :key="song.id" :song="song" :index="index+1" @play="player.playSong" /></div><p v-if="!state.songs.length" class="empty-text">{{ $root.T.noSongs }}</p></section></section>
   `
 };
-
 const PlaylistsPage = {
   components: { TrackRow },
   setup() {
@@ -317,11 +328,7 @@ const PlaylistsPage = {
     return { state, form, selectedId, selected, create, del, add, remove, player };
   },
   template: `
-    <section class="page-stack">
-      <section class="playlist-hero"><div class="playlist-cover-block">P</div><div><span class="eyebrow">{{ $root.T.playlists }}</span><h2>{{ $root.T.playlists }}</h2><p>{{ $root.T.playlists }}</p></div></section>
-      <section class="playlist-toolbar-grid"><div class="toolbar-card"><div class="section-head compact-head"><div><span>{{ $root.T.createPlaylist }}</span><h3>{{ $root.T.createPlaylist }}</h3></div></div><div class="double-row"><input v-model.trim="form.name" :placeholder="$root.T.playlistName"><button class="primary-button" type="button" @click="create">{{ $root.T.createPlaylist }}</button></div></div><div class="toolbar-card"><div class="section-head compact-head"><div><span>{{ $root.T.addSong }}</span><h3>{{ $root.T.addSong }}</h3></div></div><div class="double-row"><select v-model="form.songId"><option value="">{{ $root.T.chooseSong }}</option><option v-for="song in state.songs" :key="song.id" :value="song.id">{{ song.title }}</option></select><button class="ghost-button" type="button" @click="add">{{ $root.T.addSong }}</button></div></div></section>
-      <section class="playlist-grid"><div class="content-section"><div class="section-head"><div><span>{{ $root.T.playlists }}</span><h3>{{ $root.T.playlists }}</h3></div></div><div class="track-list"><div v-for="playlist in state.playlists" :key="playlist.id" class="playlist-summary-card" :class="{ active: selected && selected.id === playlist.id }"><button class="playlist-summary-main" type="button" @click="selectedId = playlist.id"><strong>{{ playlist.name }}</strong><p>{{ playlist.songs.length }} {{ $root.T.songs }}</p></button><button class="danger-button text-only" type="button" @click="del(playlist.id)">{{ $root.T.delete }}</button></div></div><p v-if="!state.playlists.length" class="empty-text">{{ $root.T.noPlaylists }}</p></div><div class="content-section"><div class="section-head"><div><span>{{ selected ? selected.name : $root.T.playlists }}</span><h3>{{ selected ? selected.name : $root.T.playlists }}</h3></div></div><div class="track-list"><TrackRow v-for="(song,index) in (selected ? selected.songs : [])" :key="(selected ? selected.id : 'x') + '-' + song.id" :song="song" :index="index+1" :action-label="$root.T.remove" action-kind="danger-button" @play="player.playSong" @action="remove" /></div><p v-if="selected && !selected.songs.length" class="empty-text">{{ $root.T.noSongs }}</p><p v-if="!selected" class="empty-text">{{ $root.T.noPlaylists }}</p></div></section>
-    </section>
+    <section class="page-stack"><section class="playlist-hero"><div class="playlist-cover-block">P</div><div><span class="eyebrow">{{ $root.T.playlists }}</span><h2>{{ $root.T.playlists }}</h2><p>{{ $root.T.playlists }}</p></div></section><section class="playlist-toolbar-grid"><div class="toolbar-card"><div class="section-head compact-head"><div><span>{{ $root.T.createPlaylist }}</span><h3>{{ $root.T.createPlaylist }}</h3></div></div><div class="double-row"><input v-model.trim="form.name" :placeholder="$root.T.playlistName"><button class="primary-button" type="button" @click="create">{{ $root.T.createPlaylist }}</button></div></div><div class="toolbar-card"><div class="section-head compact-head"><div><span>{{ $root.T.addSong }}</span><h3>{{ $root.T.addSong }}</h3></div></div><div class="double-row"><select v-model="form.songId"><option value="">{{ $root.T.chooseSong }}</option><option v-for="song in state.songs" :key="song.id" :value="song.id">{{ song.title }}</option></select><button class="ghost-button" type="button" @click="add">{{ $root.T.addSong }}</button></div></div></section><section class="playlist-grid"><div class="content-section"><div class="section-head"><div><span>{{ $root.T.playlists }}</span><h3>{{ $root.T.playlists }}</h3></div></div><div class="track-list"><div v-for="playlist in state.playlists" :key="playlist.id" class="playlist-summary-card" :class="{ active: selected && selected.id === playlist.id }"><button class="playlist-summary-main" type="button" @click="selectedId = playlist.id"><strong>{{ playlist.name }}</strong><p>{{ playlist.songs.length }} {{ $root.T.songs }}</p></button><button class="danger-button text-only" type="button" @click="del(playlist.id)">{{ $root.T.delete }}</button></div></div><p v-if="!state.playlists.length" class="empty-text">{{ $root.T.noPlaylists }}</p></div><div class="content-section"><div class="section-head"><div><span>{{ selected ? selected.name : $root.T.playlists }}</span><h3>{{ selected ? selected.name : $root.T.playlists }}</h3></div></div><div class="track-list"><TrackRow v-for="(song,index) in (selected ? selected.songs : [])" :key="(selected ? selected.id : 'x') + '-' + song.id" :song="song" :index="index+1" :action-label="$root.T.remove" action-kind="danger-button" @play="player.playSong" @action="remove" /></div><p v-if="selected && !selected.songs.length" class="empty-text">{{ $root.T.noSongs }}</p><p v-if="!selected" class="empty-text">{{ $root.T.noPlaylists }}</p></div></section></section>
   `
 };
 
@@ -340,17 +347,37 @@ const LoginPage = {
   setup() {
     const router = useRouter();
     const mode = ref("login");
-    const form = reactive({ username: "", password: "" });
+    const form = reactive({ username: "", password: "", confirmPassword: "" });
     const busy = ref(false);
     const submit = async () => {
+      const username = form.username.trim();
       busy.value = true;
-      try { await player.auth(form.username.trim(), form.password, mode.value); router.push("/"); } catch (e) { state.statusMessage = e.message; } finally { busy.value = false; }
+      try {
+        if (mode.value === "register") {
+          if (!isValidRegistrationPassword(form.password)) { state.statusMessage = T.value.passwordRule; return; }
+          if (form.password !== form.confirmPassword) { state.statusMessage = T.value.passwordMismatch; return; }
+          await player.auth(username, form.password, "register");
+          mode.value = "login";
+          form.password = "";
+          form.confirmPassword = "";
+          return;
+        }
+        await player.auth(username, form.password, "login");
+        router.push("/");
+      } catch (e) { setErrorMessage(e); } finally { busy.value = false; }
     };
-    const toggleLanguage = () => { i18n.lang = i18n.lang === "zh" ? "en" : "zh"; };
-    return { state, mode, form, busy, submit, toggleLanguage, T };
+    const switchMode = (nextMode) => {
+      mode.value = nextMode;
+      form.password = "";
+      form.confirmPassword = "";
+      if (!state.statusMessage || state.statusMessage === T.value.loggedOut || state.statusMessage === T.value.statusReady) {
+        state.statusMessage = nextMode === "login" ? T.value.loginText : T.value.registerText;
+      }
+    };
+    return { state, mode, form, busy, submit, switchMode, setLanguage };
   },
   template: `
-    <div class="auth-layout"><div class="auth-panel"><button class="ghost-button text-only lang-switch-btn auth-lang-switch" type="button" @click="toggleLanguage">{{ T.switchLanguage }}</button><section class="auth-hero"><div><span class="eyebrow">{{ $root.T.app }}</span><h1>{{ $root.T.loginTitle }}</h1><p>{{ mode === 'login' ? $root.T.loginText : $root.T.registerText }}</p></div><div class="auth-badges"><span>{{ $root.T.library }}</span><span>{{ $root.T.importLocal }}</span><span>{{ $root.T.playlists }}</span></div></section><section class="auth-card"><div class="auth-tabs"><button type="button" :class="{ active: mode === 'login' }" @click="mode = 'login'">{{ $root.T.login }}</button><button type="button" :class="{ active: mode === 'register' }" @click="mode = 'register'">{{ $root.T.login === '登录' ? '注册' : 'Register' }}</button></div><input v-model.trim="form.username" :placeholder="$root.T.username"><input v-model="form.password" type="password" :placeholder="$root.T.password"><button class="primary-button wide" type="button" :disabled="busy" @click="submit">{{ mode === 'login' ? $root.T.login : ($root.T.login === '登录' ? '注册' : 'Register') }}</button><p class="status-text">{{ state.statusMessage }}</p></section></div></div>
+    <div class="auth-layout"><div class="auth-panel"><section class="auth-hero"><div><span class="eyebrow">{{ $root.T.app }}</span><h1>{{ $root.T.loginTitle }}</h1><p>{{ mode === 'login' ? $root.T.loginText : $root.T.registerText }}</p></div><div class="auth-badges"><span>{{ $root.T.library }}</span><span>{{ $root.T.importLocal }}</span><span>{{ $root.T.playlists }}</span></div></section><section class="auth-card"><div class="auth-tabs"><button type="button" :class="{ active: mode === 'login' }" @click="switchMode('login')">{{ $root.T.login }}</button><button type="button" :class="{ active: mode === 'register' }" @click="switchMode('register')">{{ $root.T.register }}</button></div><input v-model.trim="form.username" :placeholder="$root.T.username"><input v-model="form.password" type="password" :placeholder="$root.T.password"><input v-if="mode === 'register'" v-model="form.confirmPassword" type="password" :placeholder="$root.T.confirmPassword"><button class="primary-button wide" type="button" :disabled="busy" @click="submit">{{ mode === 'login' ? $root.T.login : $root.T.register }}</button><p class="status-text">{{ state.statusMessage }}</p><div class="auth-card-footer"><div class="lang-switch-group"><button class="ghost-button text-only lang-switch-btn" type="button" @click="setLanguage('en')">{{ $root.T.switchLanguageEn }}</button><button class="ghost-button text-only lang-switch-btn" type="button" @click="setLanguage('zh')">{{ $root.T.switchLanguageZh }}</button></div></div></section></div></div>
   `
 };
 
@@ -368,7 +395,6 @@ router.beforeEach((to) => {
   if (state.currentUser && to.path === "/login") return "/";
   return true;
 });
-
 const routeTitles = reactive({
   "/": T.value.home,
   "/songs": T.value.songs,
@@ -399,12 +425,11 @@ const RootApp = {
     const router = useRouter();
     const openSong = async (song) => { await player.playSong(song); router.push("/now-playing"); state.search = ""; };
     const logout = () => { player.logout(); router.push("/login"); };
-    const toggleLanguage = () => { i18n.lang = i18n.lang === "zh" ? "en" : "zh"; };
     onMounted(() => { player.bootstrap(); });
-    return { T, state, navTitle, searchResults, recent, queue, openSong, logout, player, formatTime, subtitle, toggleLanguage, i18n };
+    return { T, state, navTitle, searchResults, recent, queue, openSong, logout, player, formatTime, subtitle, setLanguage };
   },
   template: `
-    <div :class="state.currentUser ? 'app-shell' : 'logged-out-shell'"><RouterView v-if="!state.currentUser" /><template v-else><div class="spotify-layout"><aside class="sidebar-shell"><section class="brand-card panel-card"><div class="brand-icon">M</div><div><strong>{{ T.app }}</strong><p>{{ T.app }}</p></div></section><nav class="sidebar-nav panel-card"><RouterLink class="sidebar-link" to="/"><span class="nav-icon">H</span><span>{{ T.home }}</span></RouterLink><RouterLink class="sidebar-link" to="/songs"><span class="nav-icon">S</span><span>{{ T.songs }}</span></RouterLink><RouterLink class="sidebar-link" to="/playlists"><span class="nav-icon">P</span><span>{{ T.playlists }}</span></RouterLink><RouterLink class="sidebar-link" to="/now-playing"><span class="nav-icon">N</span><span>{{ T.now }}</span></RouterLink></nav><section class="sidebar-library panel-card"><span class="eyebrow">{{ T.welcome }}</span><strong>{{ state.currentUser.displayName }}</strong><p>{{ state.statusMessage }}</p></section></aside><main class="main-shell"><header class="topbar-shell panel-card"><div><span class="eyebrow">{{ T.app }}</span><h1>{{ navTitle }}</h1><p class="status-text">{{ state.statusMessage }}</p></div><div class="topbar-right"><div class="search-shell"><input v-model.trim="state.search" class="search-input" :placeholder="T.search"><div v-if="state.search" class="search-dropdown"><button v-for="song in searchResults" :key="'s'+song.id" class="search-result" type="button" @click="openSong(song)"><img :src="song.coverUrl" :alt="song.title"><div><strong>{{ song.title }}</strong><p>{{ subtitle(song) }}</p></div></button><p v-if="!searchResults.length" class="empty-text">{{ T.noSongs }}</p></div></div><button class="ghost-button text-only lang-switch-btn" type="button" @click="toggleLanguage">{{ T.switchLanguage }}</button><div class="user-chip panel-soft"><div><strong>{{ state.currentUser.displayName }}</strong><p>{{ state.currentUser.username }}</p></div><button class="ghost-button text-only" type="button" @click="logout">{{ T.logout }}</button></div></div></header><RouterView /></main><aside class="insight-shell panel-card"><div class="section-head compact-head"><div><span>{{ T.history }}</span><h3>{{ T.history }}</h3></div></div><p class="section-note"></p><div class="insight-current panel-soft"><img v-if="state.currentSong" :src="state.currentSong.coverUrl" :alt="state.currentSong.title"><div v-else class="placeholder-dock">M</div><div><strong>{{ state.currentSong ? state.currentSong.title : T.noCurrent }}</strong><p>{{ state.currentSong ? subtitle(state.currentSong) : T.noSongs }}</p></div></div><div class="insight-block"><div class="section-head compact-head"><div><span>{{ T.history }}</span><h3>{{ T.history }}</h3></div></div><div class="mini-card-list"><button v-for="song in recent" :key="'r'+song.id" class="mini-song-card" type="button" @click="openSong(song)"><img :src="song.coverUrl" :alt="song.title"><div><strong>{{ song.title }}</strong><p>{{ subtitle(song) }}</p></div></button></div><p v-if="!recent.length" class="empty-text">{{ T.noHistory }}</p></div><div class="insight-block"><div class="section-head compact-head"><div><span>{{ T.queue }}</span><h3>{{ T.queue }}</h3></div></div><div class="mini-card-list"><button v-for="song in queue" :key="'q'+song.id" class="mini-song-card" type="button" @click="openSong(song)"><img :src="song.coverUrl" :alt="song.title"><div><strong>{{ song.title }}</strong><p>{{ formatTime(song.durationSeconds) }}</p></div></button></div><p v-if="!queue.length" class="empty-text">{{ T.noSongs }}</p></div></aside></div><footer class="player-dock"><div class="dock-song"><img v-if="state.currentSong" class="dock-cover" :src="state.currentSong.coverUrl" :alt="state.currentSong.title"><div v-else class="placeholder-dock">M</div><div class="dock-copy"><strong>{{ state.currentSong ? state.currentSong.title : T.noCurrent }}</strong><p>{{ state.currentSong ? subtitle(state.currentSong) : T.noSongs }}</p></div></div><div class="dock-center"><div class="dock-controls"><button class="ghost-button pill-cta" type="button" @click="player.prev()">{{ T.prev }}</button><button class="primary-button pill-cta" type="button" @click="player.toggle()">{{ state.isPlaying ? T.pause : T.play }}</button><button class="ghost-button pill-cta" type="button" @click="player.next()">{{ T.next }}</button></div><div class="dock-progress"><span>{{ formatTime(state.currentTime) }}</span><input type="range" min="0" :max="Math.max(state.duration, 0)" :value="state.currentTime" @input="player.seek($event.target.value)"><span>{{ formatTime(state.duration) }}</span></div></div><div class="dock-volume"><span>{{ T.volume }}</span><input type="range" min="0" max="1" step="0.01" :value="state.volume" @input="player.setVolume($event.target.value)"></div></footer></template></div>
+    <div :class="state.currentUser ? 'app-shell' : 'logged-out-shell'"><RouterView v-if="!state.currentUser" /><template v-else><div class="spotify-layout"><aside class="sidebar-shell"><section class="brand-card panel-card"><div class="brand-icon">M</div><div><strong>{{ T.app }}</strong><p>{{ T.library }}</p></div></section><nav class="sidebar-nav panel-card"><RouterLink class="sidebar-link" to="/"><span class="nav-icon">H</span><span>{{ T.home }}</span></RouterLink><RouterLink class="sidebar-link" to="/songs"><span class="nav-icon">S</span><span>{{ T.songs }}</span></RouterLink><RouterLink class="sidebar-link" to="/playlists"><span class="nav-icon">P</span><span>{{ T.playlists }}</span></RouterLink><RouterLink class="sidebar-link" to="/now-playing"><span class="nav-icon">N</span><span>{{ T.now }}</span></RouterLink></nav><section class="sidebar-library panel-card"><span class="eyebrow">{{ T.welcome }}</span><strong>{{ state.currentUser.displayName }}</strong><p>{{ state.statusMessage }}</p></section></aside><main class="main-shell"><header class="topbar-shell panel-card"><div><span class="eyebrow">{{ T.app }}</span><h1>{{ navTitle }}</h1><p class="status-text">{{ state.statusMessage }}</p></div><div class="topbar-right"><div class="search-shell"><input v-model.trim="state.search" class="search-input" :placeholder="T.search"><div v-if="state.search" class="search-dropdown"><button v-for="song in searchResults" :key="'s'+song.id" class="search-result" type="button" @click="openSong(song)"><img :src="song.coverUrl" :alt="song.title"><div><strong>{{ song.title }}</strong><p>{{ subtitle(song) }}</p></div></button><p v-if="!searchResults.length" class="empty-text">{{ T.noSearchResults }}</p></div></div><div class="lang-switch-group"><button class="ghost-button text-only lang-switch-btn" type="button" @click="setLanguage('en')">{{ T.switchLanguageEn }}</button><button class="ghost-button text-only lang-switch-btn" type="button" @click="setLanguage('zh')">{{ T.switchLanguageZh }}</button></div><div class="user-chip panel-soft"><div><strong>{{ state.currentUser.displayName }}</strong><p>{{ state.currentUser.username }}</p></div><button class="ghost-button text-only" type="button" @click="logout">{{ T.logout }}</button></div></div></header><RouterView /></main><aside class="insight-shell panel-card"><div class="section-head compact-head"><div><span>{{ T.history }}</span><h3>{{ T.history }}</h3></div></div><p class="section-note"></p><div class="insight-current panel-soft"><img v-if="state.currentSong" :src="state.currentSong.coverUrl" :alt="state.currentSong.title"><div v-else class="placeholder-dock">M</div><div><strong>{{ state.currentSong ? state.currentSong.title : T.noCurrent }}</strong><p>{{ state.currentSong ? subtitle(state.currentSong) : T.noSongs }}</p></div></div><div class="insight-block"><div class="section-head compact-head"><div><span>{{ T.history }}</span><h3>{{ T.history }}</h3></div></div><div class="mini-card-list"><button v-for="song in recent" :key="'r'+song.id" class="mini-song-card" type="button" @click="openSong(song)"><img :src="song.coverUrl" :alt="song.title"><div><strong>{{ song.title }}</strong><p>{{ subtitle(song) }}</p></div></button></div><p v-if="!recent.length" class="empty-text">{{ T.noHistory }}</p></div><div class="insight-block"><div class="section-head compact-head"><div><span>{{ T.queue }}</span><h3>{{ T.queue }}</h3></div></div><div class="mini-card-list"><button v-for="song in queue" :key="'q'+song.id" class="mini-song-card" type="button" @click="openSong(song)"><img :src="song.coverUrl" :alt="song.title"><div><strong>{{ song.title }}</strong><p>{{ formatTime(song.durationSeconds) }}</p></div></button></div><p v-if="!queue.length" class="empty-text">{{ T.noSongs }}</p></div></aside></div><footer class="player-dock"><div class="dock-song"><img v-if="state.currentSong" class="dock-cover" :src="state.currentSong.coverUrl" :alt="state.currentSong.title"><div v-else class="placeholder-dock">M</div><div class="dock-copy"><strong>{{ state.currentSong ? state.currentSong.title : T.noCurrent }}</strong><p>{{ state.currentSong ? subtitle(state.currentSong) : T.noSongs }}</p></div></div><div class="dock-center"><div class="dock-controls"><button class="ghost-button pill-cta" type="button" @click="player.prev()">{{ T.prev }}</button><button class="primary-button pill-cta" type="button" @click="player.toggle()">{{ state.isPlaying ? T.pause : T.play }}</button><button class="ghost-button pill-cta" type="button" @click="player.next()">{{ T.next }}</button></div><div class="dock-progress"><span>{{ formatTime(state.currentTime) }}</span><input type="range" min="0" :max="Math.max(state.duration, 0)" :value="state.currentTime" @input="player.seek($event.target.value)"><span>{{ formatTime(state.duration) }}</span></div></div><div class="dock-volume"><span>{{ T.volume }}</span><input type="range" min="0" max="1" step="0.01" :value="state.volume" @input="player.setVolume($event.target.value)"></div></footer></template></div>
   `
 };
 

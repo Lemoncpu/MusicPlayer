@@ -909,3 +909,23 @@ input[type="range"]::-webkit-slider-thumb {
     padding: 22px;
   }
 }
+.lang-switch-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-card {
+  position: relative;
+}
+
+.auth-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.auth-card-footer .lang-switch-group {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}

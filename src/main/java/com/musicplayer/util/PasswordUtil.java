@@ -13,9 +13,20 @@ public final class PasswordUtil {
     private static final int ITERATIONS = 120_000;
     private static final int SALT_LENGTH = 16;
     private static final int KEY_LENGTH = 256;
+    private static final String PASSWORD_RULE_REGEX = "^(?=.*[A-Za-z])(?=.*\\d).{8,}$";
     private static final SecureRandom RANDOM = new SecureRandom();
 
     private PasswordUtil() {
+    }
+
+    public static boolean isValidPassword(String password) {
+        return password != null && password.matches(PASSWORD_RULE_REGEX);
+    }
+
+    public static void requireValidPassword(String password) {
+        if (!isValidPassword(password)) {
+            throw new IllegalArgumentException("Password must be at least 8 characters long and include both letters and numbers");
+        }
     }
 
     public static String hashPassword(String password) {
